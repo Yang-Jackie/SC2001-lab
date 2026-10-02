@@ -1,0 +1,20 @@
+{
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.14",
+  "processor": "Intel64 Family 6 Model 151 Stepping 2, GenuineIntel",
+  "logical_processors": 20,
+  "compiler": "GCC 14.2.0 MinGW-W64 x86_64-ucrt-posix-seh",
+  "flags": "-O2 -std=c++17 -Wall -Wextra -static",
+  "seeds": [
+    2001,
+    2002,
+    2003
+  ],
+  "trials_per_graph": 9,
+  "warmup_pairs": 2,
+  "timing": "std::chrono::steady_clock elapsed milliseconds; algorithm call only, including working-vector/heap allocation and initialization, excluding result destruction",
+  "graphs": "directed simple graphs, no loops, mandatory directed cycle, remaining arcs sampled uniformly without replacement, weights uniformly 0..100",
+  "cpu": "12th Gen Intel Core i7-12700KF",
+  "physical_memory_bytes": 34164097024,
+  "plotting_python": "3.13.6"
+}

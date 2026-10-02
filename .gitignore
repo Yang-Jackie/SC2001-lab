@@ -20,3 +20,6 @@ dist/
 .idea/
 .DS_Store
 Thumbs.db
+# Local Dijkstra executables
+Lab 2/dijkstra.exe
+Lab 2/dijkstra

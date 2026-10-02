@@ -1,9 +1,13 @@
+from pathlib import Path
 import argparse
 import math
 import time
 import data_generator
 import sorting_interface
 import matplotlib.pyplot as plt
+
+OUTPUT_DIR = Path(__file__).resolve().parent / 'outputs'
+OUTPUT_DIR.mkdir(exist_ok=True)
 from matplotlib.ticker import StrMethodFormatter
 
 def plot_comparisons_and_durations(
@@ -160,7 +164,7 @@ def plot_over_input_size(dataset, S, show_plot: bool = False):
     )
 
     fig.tight_layout()
-    plt.savefig("outputs/plot_over_n.png", dpi=300)
+    plt.savefig(OUTPUT_DIR / "plot_over_n.png", dpi=300)
     if show_plot: plt.show()
 
 def plot_over_s(n_samples: int, sizes: list, thresholds: list, show_plot: bool = False):
@@ -242,7 +246,7 @@ def plot_over_s(n_samples: int, sizes: list, thresholds: list, show_plot: bool =
         ax.remove()
 
     plt.tight_layout()
-    plt.savefig("outputs/plot_over_s.png", dpi=300)
+    plt.savefig(OUTPUT_DIR / "plot_over_s.png", dpi=300)
     if show_plot: plt.show()
 
 def compare_hybrid_merge(dataset, S, show_plot: bool = False):
@@ -321,7 +325,7 @@ def compare_hybrid_merge(dataset, S, show_plot: bool = False):
     )
 
     fig.tight_layout()
-    plt.savefig("outputs/plot_hybrid_vs_merge.png", dpi=300)
+    plt.savefig(OUTPUT_DIR / "plot_hybrid_vs_merge.png", dpi=300)
     if show_plot: plt.show()
 
 
@@ -347,3 +351,4 @@ if __name__ == "__main__":
 
     # S = 64
     # compare_hybrid_merge(dataset, S)
+

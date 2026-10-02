@@ -87,6 +87,20 @@ def plot_comparisons_and_durations(
         (comparison_line, duration_line),
     )
 
+def merge_theoretical_comparisons(n):
+    # Upper bound for merge sort: log2(n) levels, at most n comparisons each.
+    return n * math.log2(n) if n > 1 else 0
+
+def hybrid_theoretical_comparisons(n, S):
+    # Worst case: insertion sort on n/S subarrays of size <= S costs at most
+    # n(S-1)/2, plus log2(n/S) merge levels of at most n comparisons each.
+    if n <= S:
+        return n * (n - 1) / 2
+    return n * math.log2(n / S) + n * S
+
+HYBRID_THEORETICAL_LABEL = r"$n\log_2(n/S) + nS$"
+MERGE_THEORETICAL_LABEL = r"$n\log_2 n$"
+
 def sanity_check():
     arr = [5, 2, 9, 1, 5, 6]
     print(f"Original array: {arr}")
@@ -136,17 +150,20 @@ def plot_over_input_size(dataset, S, show_plot: bool = False):
         },
     )
 
-    theoretical_comparisons = [
-        n * math.log2(n)
-        for n in input_sizes
-    ]
-
     theoretical_line, = ax_comparisons.plot(
         input_sizes,
-        theoretical_comparisons,
+        [merge_theoretical_comparisons(n) for n in input_sizes],
         color="black",
         linestyle="--",
-        label="O($n\log_2 n$)",
+        label=f"Merge sort theoretical: {MERGE_THEORETICAL_LABEL}",
+    )
+
+    hybrid_theoretical_line, = ax_comparisons.plot(
+        input_sizes,
+        [hybrid_theoretical_comparisons(n, S) for n in input_sizes],
+        color="tab:blue",
+        linestyle=":",
+        label=f"Hybrid theoretical: {HYBRID_THEORETICAL_LABEL}",
     )
 
     ax_comparisons.xaxis.set_major_formatter(
@@ -156,7 +173,7 @@ def plot_over_input_size(dataset, S, show_plot: bool = False):
         StrMethodFormatter("{x:,.0f}")
     )
 
-    legend_lines = [*lines, theoretical_line]
+    legend_lines = [*lines, theoretical_line, hybrid_theoretical_line]
 
     ax_comparisons.legend(
         legend_lines,
@@ -254,16 +271,6 @@ def compare_hybrid_merge(dataset, S, show_plot: bool = False):
     input_sizes, hybrid_comparisons, hybrid_durations = benchmark(dataset, S)
     _, merge_comparisons, merge_durations = benchmark(dataset, 1)
 
-    # Exact worst-case comparison count for merge sort.
-    theoretical_comparisons = []
-    for n in input_sizes:
-        if n <= 1:
-            theoretical_comparisons.append(0)
-        else:
-            theoretical_comparisons.append(
-                n * math.log2(n)
-            )
-
     fig, (ax_comparisons, ax_duration) = plt.subplots(
         1,
         2,
@@ -286,10 +293,17 @@ def compare_hybrid_merge(dataset, S, show_plot: bool = False):
     )
     ax_comparisons.plot(
         input_sizes,
-        theoretical_comparisons,
+        [hybrid_theoretical_comparisons(n, S) for n in input_sizes],
+        color="tab:blue",
+        linestyle="--",
+        label=f"Hybrid theoretical: {HYBRID_THEORETICAL_LABEL}",
+    )
+    ax_comparisons.plot(
+        input_sizes,
+        [merge_theoretical_comparisons(n) for n in input_sizes],
         color="black",
         linestyle="--",
-        label=r"O($n\log_2 n$)",
+        label=f"Merge sort theoretical: {MERGE_THEORETICAL_LABEL}",
     )
 
     ax_duration.plot(
@@ -345,10 +359,9 @@ if __name__ == "__main__":
 
     dataset = list(data_generator.dataset(100))
 
-    plot_over_input_size(dataset, S=16, show_plot=True)
+    # plot_over_input_size(dataset, S=32, show_plot=True)
 
     # plot_over_s(30, [1000, 100_000, 10_000_000], [4, 8, 16, 32, 64, 128, 256])
 
-    # S = 64
-    # compare_hybrid_merge(dataset, S)
-
+    S = 64
+    compare_hybrid_merge(dataset, S)

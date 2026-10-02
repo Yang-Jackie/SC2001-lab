@@ -52,7 +52,7 @@ cd "Lab 1"
 python main.py
 ```
 
-The program runs sanity examples and benchmarks hybrid merge sort over different input sizes. It displays the resulting plot and saves it in `Lab 1/outputs/`.
+The program runs sanity examples and compares hybrid sort (S=64) with merge sort over different input sizes. It saves the comparison plot in `Lab 1/outputs/`. Set `show_plot=True` in the experiment call to also display it.
 
 Choose which experiment to run by editing the function calls at the bottom of `main.py`:
 
